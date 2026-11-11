@@ -17,24 +17,30 @@
     if (data.session) start(); else login();
   } else start();
 
+  // Acceso sin contraseña: llega un link al correo. Solo usuarios ya creados en Supabase
+  // (shouldCreateUser:false) y, para leer datos, además deben estar en discovery_admins.
   function login(msg = "") {
     app.innerHTML = `
       <form class="login">
         <h1>Panel</h1>
-        <p>Respuestas de descubrimiento de marca.</p>
-        <label><span class="lbl">Correo</span><input class="inp" type="email" name="email" required autocomplete="username"></label>
-        <label><span class="lbl">Contraseña</span><input class="inp" type="password" name="pass" required autocomplete="current-password"></label>
+        <p>Escribe tu correo y te enviamos un link para entrar.</p>
+        <label><span class="lbl">Correo</span><input class="inp" type="email" name="email" required autocomplete="email"></label>
         <p class="err">${esc(msg)}</p>
-        <button class="btn primary lg" type="submit">Entrar</button>
+        <button class="btn primary lg" type="submit">Enviar link</button>
       </form>`;
     $("form").addEventListener("submit", async (e) => {
       e.preventDefault();
       const f = e.target;
       f.querySelector("button").disabled = true;
-      const { error } = await sb.auth.signInWithPassword({ email: f.email.value.trim(), password: f.pass.value });
-      if (error) login("Correo o contraseña incorrectos."); else start();
+      const { error } = await sb.auth.signInWithOtp({
+        email: f.email.value.trim(),
+        options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname },
+      });
+      if (error) { login("Ese correo no tiene acceso, o intenta de nuevo en un minuto."); return; }
+      app.innerHTML = `<div class="login"><h1>Revisa tu correo</h1><p>Te enviamos un link para entrar. Ábrelo en este mismo dispositivo.</p></div>`;
     });
   }
+  sb?.auth.onAuthStateChange((ev) => { if (ev === "SIGNED_IN" && !rows.length) start(); });
 
   async function fetchRows() {
     if (sb) {

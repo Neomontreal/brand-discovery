@@ -17,7 +17,8 @@ Sitio estático: HTML + JS, sin build. Backend: Supabase (base de datos + imáge
 ## Conectar Supabase (una sola vez, sirve para todos los proyectos)
 1. Crea un proyecto en supabase.com (gratis).
 2. **SQL Editor** → pega `supabase/schema.sql` → Run.
-3. **Authentication → Users → Add user**: crea tu usuario (correo + contraseña) para el panel.
+3. **Authentication → Users → Add user → Send invitation**: invita tu correo (el panel entra con link mágico, sin contraseña).
+   En **Authentication → URL Configuration** pon la dirección del sitio como Site URL y agrega `.../admin.html` a Redirect URLs.
 4. En SQL Editor: `insert into discovery_admins (email) values ('tu-correo');`
 5. **Authentication → Sign In / Providers**: desactiva "Allow new users to sign up" (solo entran los que tú crees).
 6. **Settings → API**: copia la URL y la `anon public` key a `config.js`.
