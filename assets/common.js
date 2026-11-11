@@ -13,7 +13,7 @@
     cache[slug] = new Promise((resolve, reject) => {
       window.DISCOVERY = null;
       const s = document.createElement("script");
-      s.src = `proyectos/${slug}.js`;
+      s.src = `proyectos/${slug}.js?v=${BD.cfg.version || 1}`;
       s.onload = () => (window.DISCOVERY ? resolve(normalize(window.DISCOVERY)) : reject(new Error("Proyecto vacío")));
       s.onerror = () => reject(new Error(`No existe proyectos/${slug}.js`));
       document.head.appendChild(s);

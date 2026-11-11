@@ -9,4 +9,5 @@ window.BD_CONFIG = {
   supabaseAnonKey: "sb_publishable_Mm123aw68PyccfRdceEZtg_r3TROPyJ",  // llave publicable (segura en el navegador)
   bucket: "discovery",          // bucket de Storage para las imágenes de referencia
   proyectoPorDefecto: "mia",    // se usa cuando el link no trae ?p=...
+  version: 3,                   // súbelo (y el ?v= de los HTML) al publicar cambios, para saltar la caché
 };
